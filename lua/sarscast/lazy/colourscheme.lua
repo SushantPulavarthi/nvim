@@ -1,7 +1,7 @@
 kanagawa = {
     {
         "rebelot/kanagawa.nvim",
-        priority=1000,
+        priority = 1000,
         config = function()
             require("kanagawa").setup({
                 commentStyle = { italic = false },
@@ -9,9 +9,9 @@ kanagawa = {
                 overrides = function(colors)
                     local theme = colors.theme
                     return {
-                        NormalFloat = { bg = "none" },
-                        FloatBorder = { bg = "none" },
-                        FloatTitle = { bg = "none" },
+                        -- NormalFloat = { bg = "none" },
+                        -- FloatBorder = { bg = "none" },
+                        -- FloatTitle = { bg = "none" },
 
                         -- Save an hlgroup with dark background and dimmed foreground
                         -- so that you can use it where your still want darker windows.
@@ -37,11 +37,15 @@ kanagawa = {
                         keywordStyle = { italic = false },
                     }
                 end,
+                theme = "wave",    -- Load "wave" theme when 'background' option is not set
+                background = {     -- map the value of 'background' option to a theme
+                    dark = "wave", -- try "dragon" !
+                    light = "lotus"
+                },
             })
             vim.cmd("colorscheme kanagawa")
         end,
-    }
-
+    },
 }
 
 current_colourscheme = kanagawa

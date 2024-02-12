@@ -8,7 +8,12 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
+-- setlocal spell
+vim.opt.spell = true
+vim.opt.spelllang = "en_gb"
+
 vim.opt.wrap = false
+vim.opt.conceallevel = 2
 
 vim.opt.swapfile = false
 vim.opt.backup = false

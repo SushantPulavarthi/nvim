@@ -27,11 +27,41 @@ return {
             capabilities = capabilities
         })
 
+        require("lspconfig").pyright.setup({
+            capabilities = capabilities,
+        })
+
+        -- setup taplo with completion capabilities
+        require("lspconfig").taplo.setup({
+            capabilities = capabilities,
+        })
+
+        -- ruff uses an LSP proxy, therefore it needs to be enabled as if it
+        -- were a LSP. In practice, ruff only provides linter-like diagnostics
+        -- and some code actions, and is not a full LSP yet.
+        require("lspconfig").ruff_lsp.setup({
+            -- organize imports disabled, since we are already using `isort` for that
+            -- alternative, this can be enabled to make `organize imports`
+            -- available as code action
+            settings = {
+                organizeImports = false,
+            },
+            -- disable ruff as hover provider to avoid conflicts with pyright
+            on_attach = function(client) client.server_capabilities.hoverProvider = false end,
+        })
+
         require("fidget").setup()
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "pyright",
+                -- "ruff-lsp",
+                -- "debugpy",
+                -- "black",
+                -- "isort",
+                "taplo",
+                "tailwindcss",
+                "volar",
                 "clangd",
                 "lua_ls",
                 "rust_analyzer",
@@ -55,21 +85,79 @@ return {
                         }
                     }
                 end,
-
             }
         })
 
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+        local has_words_before = function()
+            unpack = unpack or table.unpack
+            local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+            return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+        end
+
+        local luasnip = require("luasnip")
         cmp.setup({
             snippet = {
                 expand = function(args)
+                    -- vim.fn["UltiSnips#Anon"](args.body)
                     require('luasnip').lsp_expand(args.body)
                 end,
             },
+            cmp.PreselectMode.None,
             mapping = cmp.mapping.preset.insert({
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+
+                ["<CR>"] = cmp.mapping({
+                    i = function(fallback)
+                        if cmp.visible() and cmp.get_active_entry() then
+                            cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                        else
+                            fallback()
+                        end
+                    end,
+                    s = cmp.mapping.confirm({ select = true }),
+                    c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                }),
+
+                ["<Tab>"] = cmp.mapping(function(fallback)
+
+                    if cmp.visible() then
+                        cmp.select_next_item()
+                    -- elseif luasnip.expand_or_jumpable() then
+                    --     luasnip.expand_or_jump()
+                    elseif require("copilot.suggestion").is_visible() then
+                        require("copilot.suggestion").accept()
+                    elseif has_words_before() then
+                        cmp.complete()
+                        if #cmp.get_entries() == 1 then
+                            cmp.confirm({ select = true })
+                        end
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
+
+                ["<S-Tab>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_prev_item()
+                    -- elseif luasnip.jumpable(-1) then
+                    --     luasnip.jump(-1)
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
+
+                ["<leader>j"] = cmp.mapping(function()
+                    if luasnip.expand_or_jumpable() then
+                        luasnip.expand_or_jump()
+                    end
+                end, { "i", "s" }),
+
+                ["<leader>k"] = cmp.mapping(function()
+                    if luasnip.jumpable(-1) then
+                        luasnip.jump(-1)
+                    end
+                end, { "i", "s" }),
+                -- ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+                -- ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
                 ['<C-Space>'] = cmp.mapping.complete(),
             }),
             sources = cmp.config.sources({

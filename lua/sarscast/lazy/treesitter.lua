@@ -3,10 +3,20 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
-            require('nvim-treesitter.configs').setup ({
+            require('nvim-treesitter.configs').setup({
                 -- A list of parser names, or "all" (the five listed parsers should always be installed)
 
-                ensure_installed = { "lua", "python", "rust", "javascript", "typescript", "c", "vim", "vimdoc", "query" },
+                ensure_installed = {
+                    "lua",
+                    "python",
+                    "rust",
+                    "javascript",
+                    "typescript",
+                    "c",
+                    "vim",
+                    "vimdoc",
+                    "query"
+                },
 
                 -- Install parsers synchronously (only applied to `ensure_installed`)
                 sync_install = false,
@@ -16,7 +26,9 @@ return {
                 auto_install = true,
 
                 highlight = {
+
                     enable = true,
+                    disable = { "latex" },
 
                     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
                     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -26,5 +38,9 @@ return {
                 },
             })
         end,
+
     },
+    {
+        "nvim-treesitter/nvim-treesitter-context"
+    }
 }
