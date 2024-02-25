@@ -28,22 +28,24 @@ return {
         },
         fmta(
             [[
-        \documentclass[a2paper]{article}
-        \usepackage{graphicx} % Required for inserting images
-        \usepackage{amsmath}
-        \usepackage{amssymb}
-        \title{<>}
+\documentclass[12pt]{article}
+\usepackage[margins=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,amsfonts, 
+hyperref, color, graphicx}
+\def\lc{\left\lceil}
+\def\rc{\right\rceil}
 
-        \makeatletter
-        \renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
-          \hskip -\arraycolsep
-          \let\@ifnextchar\new@ifnextchar
-          \array{#1}}
-        \makeatother
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
 
-        \begin{document}
-            <>
-        \end{document}
+\begin{document}
+\begin{center}\begin{LARGE} <> \end{LARGE}\end{center}
+    <>
+\end{document}
     ]],
             {
                 i(1),

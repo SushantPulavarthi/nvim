@@ -145,7 +145,7 @@ return {
                     end
                 end, { "i", "s" }),
 
-                ["<leader>j"] = cmp.mapping(function()
+                ["<C-j>"] = cmp.mapping(function()
                     if luasnip.expand_or_jumpable() then
                         luasnip.expand_or_jump()
                     end
