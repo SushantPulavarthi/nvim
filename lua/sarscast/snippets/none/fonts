@@ -1,0 +1,97 @@
+local helpers = require('sarscast.snippets.luasnip-helper-funcs')
+local get_visual = helpers.get_visual
+
+local ls = require("luasnip")
+local s = ls.snippet
+local f = ls.function_node
+local d = ls.dynamic_node
+local fmta = require("luasnip.extras.fmt").fmta
+
+-- Math context detection-- Math context detection
+local tex = {}
+tex.in_mathzone = function() return vim.fn['vimtex#syntax#in_mathzone']() == 1 end
+tex.in_text = function() return not tex.in_mathzone() end
+
+local line_begin = function(line_to_cursor, matched_trigger)
+    -- +1 because `string.sub("abcd", 1, -2)` -> abc
+    return line_to_cursor:sub(1, -(#matched_trigger + 1)):match("^%s*$")
+end
+
+-- Return snippet tables
+return
+{
+    -- TYPEWRITER i.e. \texttt
+    s({ trig = "tt", priority = 2000 },
+        fmta(
+            "\\texttt{<>}",
+            {
+                d(1, get_visual),
+            }
+        ),
+        { condition = tex.in_text }
+    ),
+    -- ITALIC i.e. \textit
+    s({ trig = "tii"},
+        fmta(
+            "\\textit{<>}",
+            {
+                d(1, get_visual),
+            }
+        )
+    ),
+    -- BOLD i.e. \textbf
+    s({ trig = "tbb" },
+        fmta(
+            "\\textbf{<>}",
+            {
+                d(1, get_visual),
+            }
+        )
+    ),
+    -- MATH ROMAN i.e. \mathrm
+    s({ trig = "rmm"},
+        fmta(
+            "\\mathrm{<>}",
+            {
+                d(1, get_visual),
+            }
+        )
+    ),
+    -- MATH CALIGRAPHY i.e. \mathcal
+    s({ trig = "mcc"},
+        fmta(
+            "\\mathcal{<>}",
+            {
+                d(1, get_visual),
+            }
+        )
+    ),
+    -- MATH BOLDFACE i.e. \mathbf
+    s({ trig = "mbf"},
+        fmta(
+            "\\mathbf{<>}",
+            {
+                d(1, get_visual),
+            }
+        )
+    ),
+    -- MATH BLACKBOARD i.e. \mathbb
+    s({ trig = "mbb"},
+        fmta(
+            "\\mathbb{<>}",
+            {
+                d(1, get_visual),
+            }
+        )
+    ),
+    -- REGULAR TEXT i.e. \text (in math environments)
+    s({ trig = "tee"},
+        fmta(
+            "\\text{<>}",
+            {
+                d(1, get_visual),
+            }
+        ),
+        { condition = tex.in_mathzone }
+    ),
+}
