@@ -54,15 +54,11 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "pyright",
-                -- "ruff-lsp",
-                -- "debugpy",
-                -- "black",
-                -- "isort",
-                "taplo",
-                "tailwindcss",
-                "volar",
-                "clangd",
+                -- "pyright",
+                -- "taplo",
+                -- "tailwindcss",
+                -- "volar",
+                -- "clangd",
                 "lua_ls",
                 "rust_analyzer",
             },
@@ -95,17 +91,22 @@ return {
         end
 
         local luasnip = require("luasnip")
+        local cmp_select = { behavior = cmp.SelectBehavior.Select }
         cmp.setup({
             snippet = {
                 expand = function(args)
-                    -- vim.fn["UltiSnips#Anon"](args.body)
                     require('luasnip').lsp_expand(args.body)
                 end,
             },
             cmp.PreselectMode.None,
             mapping = cmp.mapping.preset.insert({
+                -- ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+                -- ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+                -- ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+                ['<C-Space>'] = cmp.mapping.complete(), -- opens menu
+                ['<C-e>'] = cmp.mapping.abort(),
 
-                ["<CR>"] = cmp.mapping({
+                ["<C-y>"] = cmp.mapping({
                     i = function(fallback)
                         if cmp.visible() and cmp.get_active_entry() then
                             cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
@@ -117,12 +118,12 @@ return {
                     c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
                 }),
 
-                ["<Tab>"] = cmp.mapping(function(fallback)
-
+                ["<C-n>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
-                    -- elseif luasnip.expand_or_jumpable() then
-                    --     luasnip.expand_or_jump()
+                        -- p
+                    elseif luasnip.expand_or_jumpable() then
+                        luasnip.expand_or_jump()
                     elseif require("copilot.suggestion").is_visible() then
                         require("copilot.suggestion").accept()
                     elseif has_words_before() then
@@ -135,11 +136,11 @@ return {
                     end
                 end, { "i", "s" }),
 
-                ["<S-Tab>"] = cmp.mapping(function(fallback)
+                ["<C-p>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_prev_item()
-                    -- elseif luasnip.jumpable(-1) then
-                    --     luasnip.jump(-1)
+                    elseif luasnip.jumpable(-1) then
+                        luasnip.jump(-1)
                     else
                         fallback()
                     end
@@ -151,14 +152,12 @@ return {
                     end
                 end, { "i", "s" }),
 
-                ["<leader>k"] = cmp.mapping(function()
-                    if luasnip.jumpable(-1) then
-                        luasnip.jump(-1)
-                    end
-                end, { "i", "s" }),
-                -- ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                -- ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<C-Space>'] = cmp.mapping.complete(),
+                -- ["<C-k>"] = cmp.mapping(function()
+                --     if luasnip.jumpable(-1) then
+                --         luasnip.jump(-1)
+                --     end
+                -- end, { "i", "s" }),
+
             }),
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },

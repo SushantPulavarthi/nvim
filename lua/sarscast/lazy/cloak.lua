@@ -12,7 +12,10 @@ return {
                         "wrangler.toml",
                         ".dev.vars",
                     },
-                    cloak_pattern = "=.+"
+                    cloak_pattern = {
+                        "=.+",
+                        ":.+"
+                    },
                 },
             },
         })

@@ -10,21 +10,21 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("n", "B", "^")
 vim.keymap.set("n", "E", "$")
 
-vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
--- Testing spellchecking
-vim.keymap.set("n", "<C-s>", [[<C-g>u<Esc>[s1z=`]a<C-g>u]])
 -- greatest remap ever
+-- Paste without copying
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- next greatest remap ever : asbjornHaland
+-- Copy to system clipboard
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
+-- Delete without copying
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 -- This is going to get me cancelled

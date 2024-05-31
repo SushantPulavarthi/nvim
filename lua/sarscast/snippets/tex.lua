@@ -10,11 +10,11 @@ local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
 local get_visual = function(args, parent)
-  if (#parent.snippet.env.LS_SELECT_RAW > 0) then
-    return sn(nil, i(1, parent.snippet.env.LS_SELECT_RAW))
-  else  -- If LS_SELECT_RAW is empty, return a blank insert node
-    return sn(nil, i(1))
-  end
+    if (#parent.snippet.env.LS_SELECT_RAW > 0) then
+        return sn(nil, i(1, parent.snippet.env.LS_SELECT_RAW))
+    else -- If LS_SELECT_RAW is empty, return a blank insert node
+        return sn(nil, i(1))
+    end
 end
 
 local tex = {}
@@ -29,8 +29,8 @@ return {
         fmta(
             [[
 \documentclass[12pt]{article}
-\usepackage[margins=1in]{geometry}
-\usepackage{amsmath,amsthm,amssymb,amsfonts, 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,amsfonts,
 hyperref, color, graphicx}
 \def\lc{\left\lceil}
 \def\rc{\right\rceil}
@@ -54,21 +54,21 @@ hyperref, color, graphicx}
         )
     ),
     s({
-        trig="fmat(%d+)x(%d+)",
-        regTrig=true,
-        dscr="Generate Matrix",
+            trig = "fmat(%d+)x(%d+)",
+            regTrig = true,
+            dscr = "Generate Matrix",
 
-    },
-    fmta(
-    [[
+        },
+        fmta(
+            [[
         <>_<>
     ]],
-    {
-        f( function(_, snip) return snip.captures[1] end ),
-        f( function(_, snip) return snip.captures[2] end )
-    }
-    )
-    ), 
+            {
+                f(function(_, snip) return snip.captures[1] end),
+                f(function(_, snip) return snip.captures[2] end)
+            }
+        )
+    ),
     s({
             trig = "enum",
             snippetType = "autosnippet",
@@ -112,6 +112,54 @@ hyperref, color, graphicx}
             {
             }
         )
+    ),
+    --\land
+    s({
+            trig = "^^",
+            snippetType = "autosnippet",
+            desc = "Expands '^^' into '\\land'"
+        },
+        t("\\land")
+    ),
+    s({
+            trig = "¬¬",
+            snippetType = "autosnippet",
+            desc = "Expands ¬¬ into '\\neg'"
+        },
+        t("\\neg")
+    ),
+    s({
+            trig = "phi",
+            snippetType = "autosnippet",
+            desc = "Expands 'phi' into '\\phi'"
+        },
+        t("\\phi")
+    ),
+    s({
+            trig = "top",
+            desc = "Expands 'top' into '\\top'"
+        },
+        t("\\top")
+    ),
+    s({
+            trig = "bot",
+            desc = "Expands 'bot' into '\\bot'"
+        },
+        t("\\bot")
+    ),
+    s({
+            trig = "psi",
+            snippetType = "autosnippet",
+            desc = "Expands 'psi' into '\\psi'"
+        },
+        t("\\psi")
+    ),
+    s({
+            trig = "||",
+            snippetType = "autosnippet",
+            desc = "Expands '||' into '\\lor'"
+        },
+        t("\\lor")
     ),
     s({ trig = "tt", dscr = "Expands 'tt' into '\texttt{}'" },
         fmta(

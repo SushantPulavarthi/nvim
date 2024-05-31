@@ -13,7 +13,6 @@ return {
         config = function(_, opts)
             local ls = require("luasnip")
 
-
             require("luasnip").config.set_config({
                 -- Allow autotrigger snippets
                 enable_autosnippets = true,

@@ -1,6 +1,5 @@
 return {
     'ThePrimeagen/vim-be-good',
-    -- "github/copilot.vim",
     {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",

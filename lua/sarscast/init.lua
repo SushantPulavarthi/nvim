@@ -21,12 +21,13 @@ autocmd("TextYankPost", {
         })
     end,
 })
---
--- autocmd({ "BufWritePre" }, {
---     group = SarscastGroup,
---     pattern = "*",
---     command = [[%s/\s\+$//e]],
--- })
+
+-- Remove trailing whitespace on save
+autocmd({ "BufWritePre" }, {
+    group = SarscastGroup,
+    pattern = "*",
+    command = [[%s/\s\+$//e]],
+})
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = { "*.norg" },
@@ -50,8 +51,37 @@ autocmd("LspAttach", {
         vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
         vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+        vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+        vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+
     end
 })
+
+local set = vim.opt_local
+
+-- Set local settings for terminal buffers
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = vim.api.nvim_create_augroup("custom-term-open", {}),
+  callback = function()
+    set.number = false
+    set.relativenumber = false
+    set.scrolloff = 0
+
+    vim.bo.filetype = "terminal"
+  end,
+})
+
+-- Easily hit escape in terminal mode.
+vim.keymap.set("t", "<C-c><C-c>", "<c-\\><c-n>")
+
+-- Open a terminal at the bottom of the screen with a fixed height.
+vim.keymap.set("n", "<leader>t", function()
+  vim.cmd.new()
+  vim.cmd.wincmd "J"
+  vim.api.nvim_win_set_height(0, 12)
+  vim.wo.winfixheight = true
+  vim.cmd.term()
+end)
 
 vim.g.netrw_browse_split = 0
 vim.g.netrw_winsize = 26
