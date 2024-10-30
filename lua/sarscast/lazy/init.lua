@@ -1,36 +1,35 @@
 return {
-    'ThePrimeagen/vim-be-good',
+    -- 'ThePrimeagen/vim-be-good',
     {
-        "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
-        event = "InsertEnter",
+      'MeanderingProgrammer/render-markdown.nvim',
+      dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+      ---@module 'render-markdown'
+      ---@type render.md.UserConfig
+      opts = {},
+    },
+    {
+        'stevearc/oil.nvim',
+        dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
-            require("copilot").setup({
-                panel = {
-                    enabled = true,
-                    auto_refresh = true,
+            require("oil").setup({
+                columns = { "icons" },
+                delete_to_trash = true,
+                skip_confirm_for_simple_edits = true,
+                keymaps = {
+                    ["<C-l>"] = false,
+                    ["<C-h>"] = false,
+                    ["<M-h>"] = false,
                 },
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = true,
-                    accept = false, -- disable built-in keymapping
+                view_options = {
+                    show_hidden = true,
                 },
             })
-
-            -- hide copilot suggestions when cmp menu is open
-            -- to prevent odd behavior/garbled up suggestions
-            local cmp_status_ok, cmp = pcall(require, "cmp")
-            if cmp_status_ok then
-                cmp.event:on("menu_opened", function()
-                    vim.b.copilot_suggestion_hidden = true
-                end)
-
-                cmp.event:on("menu_closed", function()
-                    vim.b.copilot_suggestion_hidden = false
-                end)
-            end
+            vim.keymap.set("n", "-", "<CMD>Oil<CR>")
+            vim.keymap.set("n", "<leader>pv", "<CMD>Oil<CR>")
+            vim.keymap.set("n", "<leader>-", require("oil").toggle_float)
         end,
-
     },
     {
         'numToStr/Comment.nvim',
@@ -38,6 +37,7 @@ return {
     },
     {
         'nvim-lualine/lualine.nvim',
+        event = "VeryLazy",
         requires = { 'nvim-tree/nvim-web-devicons', opt = true },
         opts = {
             options = {
@@ -65,8 +65,6 @@ return {
     {
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
-        opts = {
-        },
         config = function()
             local hooks = require "ibl.hooks"
             hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
@@ -111,4 +109,15 @@ return {
             })
         end,
     },
+    -- {
+    --     "linux-cultist/venv-selector.nvim",
+    --     dependencies = {
+    --         "neovim/nvim-lspconfig",
+    --         "nvim-telescope/telescope.nvim",
+    --         "mfussenegger/nvim-dap-python",
+    --     },
+    --     opts = {
+    --         dap_enabled = true, -- makes the debugger work with venv
+    --     },
+    -- },
 }

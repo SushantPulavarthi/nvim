@@ -6,13 +6,9 @@ kanagawa = {
             require("kanagawa").setup({
                 commentStyle = { italic = false },
                 keywordStyle = { italic = false },
-                overrides = function(colors)
-                    local theme = colors.theme
+                overrides = function(colours)
+                    local theme = colours.theme
                     return {
-                        -- NormalFloat = { bg = "none" },
-                        -- FloatBorder = { bg = "none" },
-                        -- FloatTitle = { bg = "none" },
-
                         -- Save an hlgroup with dark background and dimmed foreground
                         -- so that you can use it where your still want darker windows.
                         -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
@@ -50,4 +46,6 @@ kanagawa = {
 
 current_colourscheme = kanagawa
 
-return current_colourscheme
+return {
+    current_colourscheme
+}

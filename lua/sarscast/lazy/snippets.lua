@@ -1,11 +1,10 @@
 return {
-    { "evesdropper/luasnip-latex-snippets.nvim" },
     {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
-        build = "make install js_regexp",
+        build = "make install_jsregexp",
 
-        dependencipes = {
+        dependencies = {
             "rafamadriz/friendly-snippets",
             "evesdropper/luasnip-latex-snippets.nvim",
         },
@@ -13,24 +12,9 @@ return {
         config = function(_, opts)
             local ls = require("luasnip")
 
-            require("luasnip").config.set_config({
-                -- Allow autotrigger snippets
-                enable_autosnippets = true,
-                -- For equivalent of UltiSnips visual selection
-                store_selection_keys = "<Tab>",
-                -- -- Don't store snippet history for less overhead
-                -- history = false,
-                -- -- Event on which to check for exiting a snippet's region
-                -- region_check_events = 'InsertEnter',
-                -- delete_check_events = 'InsertLeave',
-            })
-
             if opts then
                 ls.config.setup(opts)
             end
-            vim.tbl_map(function(type)
-                require("luasnip.loaders.from_" .. type).lazy_load()
-            end, { "vscode", "snipmate", "lua" })
 
             vim.keymap.set({ "i", "s" }, "<C-E>", function()
                 if ls.choice_active() then
@@ -52,13 +36,9 @@ return {
             ls.filetype_extend("kotlin", { "kdoc" })
             ls.filetype_extend("ruby", { "rdoc" })
             ls.filetype_extend("sh", { "shelldoc" })
-            -- require("luasnip.loaders.from_vscode").load()
+
             require("luasnip.loaders.from_lua").lazy_load({ paths = "~/.config/nvim/lua/sarscast/snippets/" })
-            require("luasnip.loaders.from_lua").lazy_load({ paths = "~/.config/nvim/lua/sarscast/snippets/tex" })
-
-            -- snippet_path = debug.getinfo(1).source:sub(2):gsub("init.lua", "luasnippets")
-            -- require("luasnip.loaders.from_lua").lazy_load({ paths = snippet_path })
-
+            require("luasnip.loaders.from_vscode").lazy_load()
 
             vim.keymap.set('', '<Leader>U',
                 '<Cmd>lua require("luasnip.loaders.from_lua").lazy_load({paths = "~/.config/nvim/lua/sarscast/snippets/"})<CR><Cmd>echo "Snippets refreshed!"<CR>')

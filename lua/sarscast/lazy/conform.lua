@@ -1,34 +1,32 @@
+local defaultFormatOpts =  { async = false, timeout_ms = 5000, lsp_fallback = true }
 return {
     {
         "stevearc/conform.nvim",
-        event = "BufWritePre", -- load the plugin before saving
         keys = {
             {
                 "<leader>f",
-                function() require("conform").format({ lsp_fallback = true }) end,
+                function() require("conform").format(defaultFormatOpts) end,
                 desc = "Format",
             },
         },
         opts = {
             formatters_by_ft = {
+                go = { "goimports_reviser", "gofmt" },
                 lua = { "stylua" },
                 python = { "isort", "black" },
                 markdown = { "inject" },
                 javascript = { { "prettierd", "prettier" } },
+                css = { "prettier" },
+                sh = { "shfmt" },
+                toml = { "taplo" },
+                c={"clangd"},
+                -- yaml = { "prettier" },
+                json = { "prettier" },
+                html = { "prettier" },
                 typst = { "typstfmt" },
                 latex = { "latexindent" },
             },
-        },
-    },
-    {
-        "linux-cultist/venv-selector.nvim",
-        dependencies = {
-            "neovim/nvim-lspconfig",
-            "nvim-telescope/telescope.nvim",
-            "mfussenegger/nvim-dap-python",
-        },
-        opts = {
-            dap_enabled = true, -- makes the debugger work with venv
+            -- format_on_save = defaultFormatOpts,
         },
     },
 }

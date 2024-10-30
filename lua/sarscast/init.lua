@@ -1,9 +1,8 @@
 require("sarscast.remap")
 require("sarscast.set")
 require("sarscast.lazy_init")
-require("luasnip.loaders.from_vscode").load()
+
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/Snippets/" })
--- vim.g.UltiSnipsSnippetDirectories = { "~/.config/nvim/lua/sarscast/snippets/ultisnip" }
 
 local augroup = vim.api.nvim_create_augroup
 local SarscastGroup = augroup("Sarscast", {})
@@ -29,12 +28,12 @@ autocmd({ "BufWritePre" }, {
     command = [[%s/\s\+$//e]],
 })
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-    pattern = { "*.norg" },
-    command = ":setl noai nocin nosi inde= conceallevel=3 linebreak breakindent wrap colorcolumn=0"
-})
+-- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+--     pattern = { "*.norg" },
+--     command = ":setl noai nocin nosi inde= conceallevel=3 linebreak breakindent wrap colorcolumn=0"
+-- })
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = { "*.tex" },
     command = ":setl noai nocin nosi inde= conceallevel=0 linebreak breakindent wrap colorcolumn=0"
 })
@@ -53,22 +52,21 @@ autocmd("LspAttach", {
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
         vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
         vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-
     end
 })
 
 local set = vim.opt_local
 
 -- Set local settings for terminal buffers
-vim.api.nvim_create_autocmd("TermOpen", {
-  group = vim.api.nvim_create_augroup("custom-term-open", {}),
-  callback = function()
-    set.number = false
-    set.relativenumber = false
-    set.scrolloff = 0
+autocmd("TermOpen", {
+    group = vim.api.nvim_create_augroup("custom-term-open", {}),
+    callback = function()
+        set.number = false
+        set.relativenumber = false
+        set.scrolloff = 0
 
-    vim.bo.filetype = "terminal"
-  end,
+        vim.bo.filetype = "terminal"
+    end,
 })
 
 -- Easily hit escape in terminal mode.
@@ -76,11 +74,11 @@ vim.keymap.set("t", "<C-c><C-c>", "<c-\\><c-n>")
 
 -- Open a terminal at the bottom of the screen with a fixed height.
 vim.keymap.set("n", "<leader>t", function()
-  vim.cmd.new()
-  vim.cmd.wincmd "J"
-  vim.api.nvim_win_set_height(0, 12)
-  vim.wo.winfixheight = true
-  vim.cmd.term()
+    vim.cmd.new()
+    vim.cmd.wincmd "J"
+    vim.api.nvim_win_set_height(0, 12)
+    vim.wo.winfixheight = true
+    vim.cmd.term()
 end)
 
 vim.g.netrw_browse_split = 0
