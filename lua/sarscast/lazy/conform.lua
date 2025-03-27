@@ -1,4 +1,4 @@
-local defaultFormatOpts =  { async = false, timeout_ms = 5000, lsp_fallback = true }
+local defaultFormatOpts = { async = false, timeout_ms = 5000, lsp_fallback = true }
 return {
     {
         "stevearc/conform.nvim",
@@ -19,7 +19,7 @@ return {
                 css = { "prettier" },
                 sh = { "shfmt" },
                 toml = { "taplo" },
-                c={"clangd"},
+                c = { "clangd" },
                 -- yaml = { "prettier" },
                 json = { "prettier" },
                 html = { "prettier" },

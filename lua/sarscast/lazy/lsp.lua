@@ -49,9 +49,9 @@ return {
         })
 
         -- setup taplo with completion capabilities
-        require("lspconfig").taplo.setup({
-            capabilities = capabilities,
-        })
+        -- require("lspconfig").taplo.setup({
+        --     capabilities = capabilities,
+        -- })
 
         -- require("lspconfig").zls.setup({
         --     capabilities = capabilities,
@@ -68,7 +68,7 @@ return {
             ensure_installed = {
                 -- "pyright",
                 -- "taplo",
-                -- "tailwindcss",
+                "tailwindcss",
                 -- "volar",
                 -- "clangd",
                 "lua_ls",
@@ -178,7 +178,7 @@ return {
                 --     end
                 -- end, { "i", "s" }),
 
-                ["<leader>j"] = cmp.mapping(function(fallback)
+                ["<C-l>"] = cmp.mapping(function(fallback)
                     if luasnip.expand_or_jumpable() then
                         luasnip.expand_or_jump()
                     else
@@ -186,11 +186,11 @@ return {
                     end
                 end, { "i", "s" }),
 
-                -- ["<leader>k"] = cmp.mapping(function()
-                --     if luasnip.jumpable(-1) then
-                --         luasnip.jump(-1)
-                --     end
-                -- end, { "i", "s" }),
+                ["<C-h>"] = cmp.mapping(function()
+                    if luasnip.jumpable(-1) then
+                        luasnip.jump(-1)
+                    end
+                end, { "i", "s" }),
             }),
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },

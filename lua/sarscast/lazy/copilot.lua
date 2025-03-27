@@ -1,8 +1,7 @@
 return {
     "zbirenbaum/copilot.lua",
-    -- enabled = false,
+    -- Require using :Copilot to enable
     cmd = "Copilot",
-    event = "InsertEnter",
     config = function()
         require("copilot").setup({
             panel = {

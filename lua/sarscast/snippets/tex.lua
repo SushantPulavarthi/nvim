@@ -17,9 +17,35 @@ local get_visual = function(args, parent)
     end
 end
 
+local mat = function(args, snip)
+    print(args)
+    print(snip)
+    local rows = tonumber(snip.captures[2])
+    local cols = tonumber(snip.captures[3])
+    local nodes = {}
+    local ins_indx = 1
+    for j = 1, rows do
+        table.insert(nodes, r(ins_indx, tostring(j) .. "x1", i(1)))
+        ins_indx = ins_indx + 1
+        for k = 2, cols do
+            table.insert(nodes, t(" & "))
+            table.insert(nodes, r(ins_indx, tostring(j) .. "x" .. tostring(k), i(1)))
+            ins_indx = ins_indx + 1
+        end
+        table.insert(nodes, t({ "\\\\", "" }))
+    end
+    -- fix last node.
+    nodes[#nodes] = t("\\\\")
+    return sn(nil, nodes)
+end
+
 local tex = {}
 tex.in_mathzone = function() return vim.fn['vimtex#syntax#in_mathzone']() == 1 end
 tex.in_text = function() return not tex.in_mathzone() end
+
+local function math()
+    return vim.api.nvim_eval('vimtex#syntax#in_mathzone()') == 1
+end
 
 return {
     s({
@@ -42,8 +68,13 @@ hyperref, color, graphicx}
   \array{#1}}
 \makeatother
 
+\maketitle{<>}
+\author{}
+\date{}
+
 \begin{document}
-\begin{center}\begin{LARGE} <> \end{LARGE}\end{center}
+\maketitle
+\vspace{-1.5cm}
     <>
 \end{document}
     ]],
@@ -52,6 +83,28 @@ hyperref, color, graphicx}
                 i(2)
             }
         )
+    ),
+    s(
+        { trig = "([%sbBpvV])mat(%d+)x(%d+)r", snippetType = "autosnippet", regTrig = true, wordTrig = false, dscr =
+        "[bBpvV]matrix of A x B size" },
+        fmta([[
+    \begin{<>}
+    <>
+    \end{<>}]],
+            {
+                f(function(_, snip)
+                    if snip.captures[1] == " " then
+                        return "matrix"
+                    else
+                        return snip.captures[1] .. "matrix"
+                    end
+                end),
+                d(1, mat),
+                f(function(_, snip)
+                    return snip.captures[1] .. "matrix"
+                end)
+            }),
+        { condition = math }
     ),
     s({
             trig = "fmat(%d+)x(%d+)",
