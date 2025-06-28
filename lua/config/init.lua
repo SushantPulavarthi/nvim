@@ -1,11 +1,9 @@
-require("sarscast.remap")
-require("sarscast.set")
-require("sarscast.lazy_init")
-
-require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/Snippets/" })
+require("config.remap")
+require("config.set")
+require("config.lazy")
 
 local augroup = vim.api.nvim_create_augroup
-local SarscastGroup = augroup("Sarscast", {})
+local ConfigGroup = augroup("Config", {})
 
 local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup("highlightyank", {})
@@ -23,7 +21,7 @@ autocmd("TextYankPost", {
 
 -- Remove trailing whitespace on save
 autocmd({ "BufWritePre" }, {
-  group = SarscastGroup,
+  group = ConfigGroup,
   pattern = "*",
   command = [[%s/\s\+$//e]],
 })
@@ -39,7 +37,7 @@ autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 
 autocmd("LspAttach", {
-  group = SarscastGroup,
+  group = ConfigGroup,
   callback = function(e)
     local opts = { buffer = e.buf }
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
@@ -72,4 +70,3 @@ autocmd("TermOpen", {
 
 vim.g.netrw_browse_split = 0
 vim.g.netrw_winsize = 26
-

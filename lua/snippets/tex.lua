@@ -68,7 +68,7 @@ hyperref, color, graphicx}
   \array{#1}}
 \makeatother
 
-\maketitle{<>}
+\title{<>}
 \author{}
 \date{}
 

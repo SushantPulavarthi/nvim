@@ -1,1 +1,1 @@
-require("sarscast")
+require("config")

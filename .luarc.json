@@ -1,7 +1,4 @@
 {
-    "diagnostics.globals": [
-        "vim",
-        "kanagawa",
-        "current_colourscheme"
-    ]
+  "diagnostics.globals": ["vim", "kanagawa", "current_colourscheme"]
 }
+
